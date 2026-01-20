@@ -1,7 +1,7 @@
 import cv2
 from deepface import DeepFace
 import os
-
+from utils.utils import analyseImages
 # On force l'utilisation du CPU pour éviter les soucis de pilotes GPU au début
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -31,17 +31,7 @@ def start_emotion_detection():
                                        detector_backend='opencv')
 
             # DeepFace renvoie une liste (un dictionnaire par visage détecté)
-            for res in results:
-                # Récupérer les coordonnées du visage pour dessiner un carré
-                x, y, w, h = res['region']['x'], res['region']['y'], res['region']['w'], res['region']['h']
-                emotion = res['dominant_emotion']
-
-                # 4. Dessiner un rectangle autour du visage
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-                # 5. Écrire l'émotion au-dessus du rectangle
-                cv2.putText(frame, emotion, (x, y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+            analyseImages(results,frame)
 
         except Exception as e:
             print(f"Erreur d'analyse : {e}")
