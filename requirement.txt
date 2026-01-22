@@ -5,7 +5,3 @@ opencv-python==4.11.0.86
 deepface==0.0.93
 matplotlib
 pandas
-
-
-
-(Reverifier les version)
