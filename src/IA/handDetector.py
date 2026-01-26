@@ -45,6 +45,24 @@ class HandPoseDetector:
 
         return frame
 
+    def get_hand_bboxes(self, frame):
+        """
+        Return a tuple list (x1,x2,y1,y2) of the hand bounding
+        """
+        bboxes = []
+        results = self.model(frame, conf=0.3, verbose=False)
+
+        for r in results:
+            if r.keypoints is None:
+                continue
+            kpts = r.keypoints.xy.cpu().numpy()
+            for hand in kpts:
+                x1, y1 = int(hand[:, 0].min()), int(hand[:, 1].min())
+                x2, y2 = int(hand[:, 0].max()), int(hand[:, 1].max())
+                bboxes.append((x1, y1, x2, y2))
+
+        return bboxes
+
 
 # Just below ,the exemple on how use the model
 def main():
@@ -62,7 +80,8 @@ def main():
 
         frame = detector.detect(frame)
         cv2.imshow("Hand Pose Detection", frame)
-
+        #get hand bounding coordinates
+        print(detector.get_hand_bboxes(frame))
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
