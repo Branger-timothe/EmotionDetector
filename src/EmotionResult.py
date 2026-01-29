@@ -4,37 +4,43 @@ import os
 from typing import List, Dict
 from dataclasses import dataclass
 
+
 @dataclass
 class EmotionResult:
-    """Classe pour stocker les résultats d'analyse d'émotions"""
+    """Classe pour stocker les résultats d'analyse (émotions + âge)"""
     dominant_emotion: str
     emotions: Dict[str, float]
+    age: int
     region: Dict[str, int]
 
     @classmethod
-    def from_deepface_result(cls, result: Dict) -> 'EmotionResult':
-        """Crée un EmotionResult à partir d'un résultat DeepFace"""
+    def from_deepface_result(cls, result: Dict) -> 'AnalysisResult':
+        """Crée un AnalysisResult à partir d'un résultat DeepFace"""
         return cls(
             dominant_emotion=result.get('dominant_emotion', 'unknown'),
             emotions=result.get('emotion', {}),
+            age=result.get('age', 0),
             region=result.get('region', {})
         )
 
 
 class EmotionDetector:
-    """Gestionnaire de la détection d'émotions via DeepFace"""
+    """Gestionnaire de l'analyse faciale via DeepFace (émotions + âge)"""
 
     def __init__(self, detector_backend: str = 'opencv',
-                 enforce_detection: bool = False):
+                 enforce_detection: bool = False,
+                 actions: List[str] = None):
         """
-        Initialise le détecteur d'émotions
+        Initialise l'analyseur facial
 
         Args:
             detector_backend: Backend de détection ('opencv', 'ssd', 'mtcnn', etc.)
             enforce_detection: Si True, lève une erreur si aucun visage détecté
+            actions: Liste des analyses à effectuer ['emotion', 'age', 'gender', 'race']
         """
         self.detector_backend = detector_backend
         self.enforce_detection = enforce_detection
+        self.actions = actions or ['emotion', 'age']  # Par défaut: émotion + âge
         self._configure_tensorflow()
 
     @staticmethod
@@ -44,18 +50,18 @@ class EmotionDetector:
 
     def analyze(self, frame) -> List[EmotionResult]:
         """
-        Analyse les émotions dans une image
+        Analyse le visage dans une image (émotions + âge)
 
         Args:
             frame: Image à analyser (format numpy array)
 
         Returns:
-            Liste d'EmotionResult pour chaque visage détecté
+            Liste d'AnalysisResult pour chaque visage détecté
         """
         try:
             results = DeepFace.analyze(
                 frame,
-                actions=['emotion'],
+                actions=self.actions,
                 enforce_detection=self.enforce_detection,
                 detector_backend=self.detector_backend
             )
@@ -110,9 +116,9 @@ class VideoCapture:
 
 
 class EmotionVisualizer:
-    """Gestionnaire de l'affichage des résultats"""
+    """Gestionnaire de l'affichage des résultats (émotions + âge)"""
 
-    def __init__(self, window_name: str = "Détection d'Émotions"):
+    def __init__(self, window_name: str = "Détection Visage - Émotions & Âge"):
         """
         Initialise le visualiseur
 
@@ -127,11 +133,11 @@ class EmotionVisualizer:
 
         Args:
             frame: Image sur laquelle dessiner
-            results: Liste des résultats d'émotions
+            results: Liste des résultats d'analyse
         """
         for result in results:
             self._draw_face_box(frame, result.region)
-            self._draw_emotion_text(frame, result)
+            self._draw_info_text(frame, result)
 
     def _draw_face_box(self, frame, region: Dict[str, int]):
         """Dessine un rectangle autour du visage"""
@@ -142,14 +148,16 @@ class EmotionVisualizer:
 
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    def _draw_emotion_text(self, frame, result: EmotionResult):
-        """Affiche l'émotion dominante et les scores"""
+    def _draw_info_text(self, frame, result: EmotionResult):
+        """Affiche l'émotion dominante, l'âge et les scores"""
         region = result.region
         x = region.get('x', 0)
         y = region.get('y', 0)
+        w = region.get('w', 0)
 
-        # Émotion dominante
-        text = f"{result.dominant_emotion}"
+
+        # Émotion dominante + Âge
+        text = f"{result.dominant_emotion} | Age: {result.age}"
         cv2.putText(frame, text, (x, y - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
@@ -159,7 +167,7 @@ class EmotionVisualizer:
 
         for i, (emotion, score) in enumerate(sorted_emotions):
             text = f"{emotion}: {score:.1f}%"
-            cv2.putText(frame, text, (x, y + 30 + i * 25),
+            cv2.putText(frame, text, (x+w+10, y + 30 + i * 25),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
 
     def show(self, frame):
