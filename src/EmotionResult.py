@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class AnalysisResult:
+class EmotionResult:
     """Classe pour stocker les résultats d'analyse (émotions + âge)"""
     dominant_emotion: str
     emotions: Dict[str, float]
@@ -24,7 +24,7 @@ class AnalysisResult:
         )
 
 
-class FaceAnalyzer:
+class EmotionDetector:
     """Gestionnaire de l'analyse faciale via DeepFace (émotions + âge)"""
 
     def __init__(self, detector_backend: str = 'opencv',
@@ -48,7 +48,7 @@ class FaceAnalyzer:
         """Configure TensorFlow pour éviter les warnings"""
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-    def analyze(self, frame) -> List[AnalysisResult]:
+    def analyze(self, frame) -> List[EmotionResult]:
         """
         Analyse le visage dans une image (émotions + âge)
 
@@ -70,7 +70,7 @@ class FaceAnalyzer:
             if isinstance(results, dict):
                 results = [results]
 
-            return [AnalysisResult.from_deepface_result(r) for r in results]
+            return [EmotionResult.from_deepface_result(r) for r in results]
 
         except Exception as e:
             print(f"Erreur lors de l'analyse : {e}")
@@ -115,7 +115,7 @@ class VideoCapture:
             self.cap.release()
 
 
-class FaceVisualizer:
+class EmotionVisualizer:
     """Gestionnaire de l'affichage des résultats (émotions + âge)"""
 
     def __init__(self, window_name: str = "Détection Visage - Émotions & Âge"):
@@ -127,7 +127,7 @@ class FaceVisualizer:
         """
         self.window_name = window_name
 
-    def draw_results(self, frame, results: List[AnalysisResult]):
+    def draw_results(self, frame, results: List[EmotionResult]):
         """
         Dessine les résultats sur l'image
 
@@ -148,7 +148,7 @@ class FaceVisualizer:
 
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    def _draw_info_text(self, frame, result: AnalysisResult):
+    def _draw_info_text(self, frame, result: EmotionResult):
         """Affiche l'émotion dominante, l'âge et les scores"""
         region = result.region
         x = region.get('x', 0)
