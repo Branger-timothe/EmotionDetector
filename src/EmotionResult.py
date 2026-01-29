@@ -178,4 +178,3 @@ class EmotionVisualizer:
     def cleanup():
         """Ferme toutes les fenêtres OpenCV"""
         cv2.destroyAllWindows()
-
