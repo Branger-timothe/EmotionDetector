@@ -1,0 +1,7 @@
+numpy==1.26.4
+tensorflow==2.16.1
+tf-keras==2.16.0
+opencv-python==4.11.0.86
+deepface==0.0.93
+matplotlib
+pandas
