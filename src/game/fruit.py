@@ -1,16 +1,36 @@
+from pathlib import Path
+
 import pygame
 
-import fruitType
+from .fruitType import TypeFruit
 
-
+base_dir = Path(__file__).resolve().parent.parent.parent
+assets_dir = base_dir / "assets" / "fruits"
 class Fruit:
-    def __init__(self, fruitType: fruitType, position=(100, 100),speed=5):
+    def __init__(self, fruitType: TypeFruit, position=(100, 100), speed=5):
+        from pathlib import Path
+        import pygame
+
         self.isCut = False
         self.fruitType = fruitType
         self.position = list(position)
         self.speed = speed
-        self.image_whole = pygame.image.load(f"../assets/fruits/{fruitType.value}.png").convert_alpha()
-        self.image_cut_1 = pygame.image.load(f"../assets/fruits/{fruitType.value}_half_1.png").convert_alpha()
+
+        # Chemin absolu vers assets/fruits/
+        base_dir = Path(__file__).resolve().parent.parent.parent
+        assets_dir = base_dir / "assets" / "fruits"
+
+        # Affichage de débogage
+        print(f"Chemin des assets : {assets_dir}")
+        print(f"Fichiers dans assets/fruits : {[f.name for f in assets_dir.iterdir()]}")
+        print(f"Recherche de : {fruitType.value}.png")
+
+        # Chargement des images avec gestion d'erreur
+        print(str(assets_dir / f"{fruitType.value}.png"))
+
+        self.image_whole = pygame.image.load(str(assets_dir / f"{fruitType.value}.png")).convert_alpha()
+        self.image_cut_1 = pygame.image.load(str(assets_dir / f"{fruitType.value}_half_1.png")).convert_alpha()
+
 
         self.current_image = self.image_whole
         self.rect = self.current_image.get_rect(center=self.position)
@@ -35,7 +55,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     # ---------- Crée un fruit ----------
-    fruit = Fruit(fruitType=fruitType.TypeFruit.APPLE, position=(100,100),speed=5)
+    fruit = Fruit(fruitType=TypeFruit.APPLE, position=(100,100),speed=5)
 
     # ---------- Boucle principale ----------
     running = True
