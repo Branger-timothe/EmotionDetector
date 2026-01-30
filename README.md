@@ -39,4 +39,6 @@ pip install torch torchvision torchaudio
 pip install ultralytics>=8.1.0
 pip install opencv-python`
 
+To throw the game : 
+`python -m src.game.game`
 
