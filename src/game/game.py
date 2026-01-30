@@ -36,7 +36,7 @@ class Game:
         for fruit in self.fruits:
             fruit.draw(screen)
 
-def create_game():
+def create_fruit_ninja_game():
     pygame.init()
     WIDTH, HEIGHT = 1280, 720
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -91,4 +91,4 @@ def create_game():
     cap.release()
     pygame.quit()
 if __name__ == "__main__":
-    create_game()
+    create_fruit_ninja_game()
