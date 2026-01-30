@@ -2,6 +2,9 @@
 Detetction of numbers on camera with AI 
 
 # Hand Detector
+ouvrir un terminal powershell
+: 
+
 
 install python 3.10.X
 
@@ -14,6 +17,9 @@ verify
 should return :
 
 `Python 3.10.x`
+
+ouvrir un terminal sous linux
+: 
 
 create venv : 
 
