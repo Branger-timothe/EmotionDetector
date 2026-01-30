@@ -11,6 +11,7 @@ MODEL_PATH = BASE_DIR / "../../model/best.pt"
 class HandPoseDetector:
     def __init__(self, model_path=MODEL_PATH):
         self.model = YOLO(model_path)
+        self.last_results = None
 
     def detect(self, frame):
         results = self.model(frame, conf=0.3, verbose=False)
@@ -45,23 +46,54 @@ class HandPoseDetector:
 
         return frame
 
-    def get_hand_bboxes(self, frame):
+    def process(self, frame):
         """
-        Return a tuple list (x1,x2,y1,y2) of the hand bounding
+        Lance YOLO UNE FOIS et stocke les résultats
         """
-        bboxes = []
-        results = self.model(frame, conf=0.3, verbose=False)
+        self.last_results = self.model(frame, conf=0.3, verbose=False)
+        return self.last_results
 
-        for r in results:
+    def get_hands_box(self):
+        """
+        Retourne [(x1, y1, x2, y2), ...]
+        """
+        box = []
+
+        if self.last_results is None:
+            return box
+
+        for r in self.last_results:
             if r.keypoints is None:
                 continue
+
             kpts = r.keypoints.xy.cpu().numpy()
             for hand in kpts:
                 x1, y1 = int(hand[:, 0].min()), int(hand[:, 1].min())
                 x2, y2 = int(hand[:, 0].max()), int(hand[:, 1].max())
-                bboxes.append((x1, y1, x2, y2))
+                box.append((x1, y1, x2, y2))
 
-        return bboxes
+        return box
+
+    def draw(self, frame):
+        if self.last_results is None:
+            return frame
+
+        for r in self.last_results:
+            if r.keypoints is None:
+                continue
+
+            kpts = r.keypoints.xy.cpu().numpy()
+
+            for hand in kpts:
+                for (x, y) in hand:
+                    cv2.circle(frame, (int(x), int(y)), 4, (0, 0, 255), -1)
+
+                x1, y1 = int(hand[:, 0].min()), int(hand[:, 1].min())
+                x2, y2 = int(hand[:, 0].max()), int(hand[:, 1].max())
+
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+        return frame
 
 
 # Just below ,the exemple on how use the model
@@ -81,7 +113,7 @@ def main():
         frame = detector.detect(frame)
         cv2.imshow("Hand Pose Detection", frame)
         #get hand bounding coordinates
-        print(detector.get_hand_bboxes(frame))
+        print(detector.get_hands_box())
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
