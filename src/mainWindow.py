@@ -1,3 +1,5 @@
+import pygame
+
 import EmotionResult as ER
 
 import tkinter as tk
@@ -9,6 +11,9 @@ from PIL import Image, ImageTk
 import threading
 import cv2
 import time
+
+from src.IA.handDetector import HandPoseDetector
+from src.game.game import Game, create_fruit_ninja_game
 
 
 class MainWindow:
@@ -111,7 +116,11 @@ class MainWindow:
         if self.btn_game:
             self.btn_game.pack_forget()
         self.btn_end_game.pack(pady=10, padx=20, fill='x')
-
+        game_thread = threading.Thread(
+            target=create_fruit_ninja_game,
+            daemon=True
+        )
+        game_thread.start()
 
     def end_game_placeholder(self):
         print("Signal : Arrêt du jeu")
@@ -174,6 +183,13 @@ class MainWindow:
         self.is_running = False
         self.camera.release()
         self.root.destroy()
+
+    def get_latest_frame(self):
+        if self.camera:
+            ret, frame = self.camera.read()
+            if ret:
+                return frame
+        return None
 
 
 if __name__ == "__main__":

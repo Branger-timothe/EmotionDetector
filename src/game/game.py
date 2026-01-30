@@ -36,8 +36,7 @@ class Game:
         for fruit in self.fruits:
             fruit.draw(screen)
 
-
-if __name__ == "__main__":
+def create_fruit_ninja_game():
     pygame.init()
     WIDTH, HEIGHT = 1280, 720
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -91,3 +90,5 @@ if __name__ == "__main__":
 
     cap.release()
     pygame.quit()
+if __name__ == "__main__":
+    create_fruit_ninja_game()
