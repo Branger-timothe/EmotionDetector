@@ -40,6 +40,7 @@ class MainWindow:
         self.btn_start.pack(pady=10, padx=20, fill='x')
         self.btn_stop = ttk.Button(self.control_panel, text="Arrêter Caméra", command=self.stop_cam_placeholder)
         self.btn_game = ttk.Button(self.control_panel, text="Lancer Jeu", command=self.start_game_placeholder)
+        self.btn_game.pack(pady=10, padx=20, fill='x')
         self.btn_end_game = ttk.Button(self.control_panel, text="Arrêter Jeu", command=self.end_game_placeholder)
         self.btn_quit = ttk.Button(self.control_panel, text="Quitter", command=self.on_closing)
         self.btn_quit.pack(side="bottom", pady=20, padx=20, fill='x')
