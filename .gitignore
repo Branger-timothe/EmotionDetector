@@ -1,6 +1,9 @@
-.idea/
+# Modèles ML
+model/*.pt
+
+# Environnements et caches
 __pycache__/
 *.pyc
+.idea/
 handDetectorEnv/
 yoloenv/
-.env
