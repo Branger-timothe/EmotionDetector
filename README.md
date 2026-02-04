@@ -1,52 +1,71 @@
-# numbersWithFingers
-Detetction of numbers on camera with AI 
+# Hand & Emotions detector
+AI-powered detection hands & emotions detector using computer vision and hand tracking.
 
-# Hand Detector
-ouvrir un terminal powershell
-: 
+## Installation & Setup
 
+### 1. Install Python 3.10
+Open a PowerShell terminal and execute the following:
 
-install python 3.10.X
+* **Install Python:**
+  ```powershell
+  winget install Python.Python.3.10
+  ```
 
-`winget install Python.Python.3.10`
+* **Verify Installation:**
 
-verify
-
-`py -3.10 --version`
-
-should return :
-
-`Python 3.10.x`
-
-ouvrir un terminal sous linux
-: 
-
-create venv : 
+   ```powershell
+   py -3.10 --version
+   ```
+  <sup>(Expected output: Python 3.10.x)</sup>
 
 
-`cd C:\Your\Path\To\The\Project`
+### 2. Environment Configuration
+Navigate to your project directory and set up the virtual environment:
 
-create your env : 
+* **Navigate to project folder:**
 
+   ```bash
+   cd C:\Your\Path\To\The\Project
+   ```
+* **Create virtual environment:**
 
-`python -m venv handDetectorEnv`
+   ```bash
+   py -3.10 -m venv handDetectorEnv
+   ```
+*  **Activate the environment:**
 
+   ```bash
+   handDetectorEnv\Scripts\activate
+   ```
 
-activate your env :
+### 3. Install Dependencies
+With the environment activated, run these commands to install required packages:
 
-`yoloenv\Scripts\activate`
+Upgrade pip:
 
-Install version of packages : 
-
-
-`python -m pip install --upgrade pip
-pip install numpy==1.26.4
+```bash
+python -m pip install --upgrade pip
+```
+Install PyTorch:
+```bash
 pip install torch torchvision torchaudio
-pip install ultralytics>=8.1.0
-pip install opencv-python
-pip install pygame
-pip install deepface`
+```
+Install remaining packages :
+```bash
+pip install -r requirements.txt
+```
+<small>(This will automatically install NumPy, TensorFlow, DeepFace, and other dependencies)</small>
 
-To throw the game : 
-`python -m src.game.game`
+### 4. Download Model Weights
+As the pre-trained model file is too large for GitHub, it must be downloaded manually:
 
+* **Download `best.pt`:** [Click here to download](https://github.com/RionDsilvaCS/yolo-hand-pose/blob/main/model/best.pt)
+* **Installation:** Move the `best.pt` file into the `model/` folder in the project root.
+  *<small>(If the "model" folder does not exist, please create it manually)</small>*
+
+### 5. Run the Application
+Start the detection system by running the game module:
+
+```bash
+python -m src.mainWindow
+```
