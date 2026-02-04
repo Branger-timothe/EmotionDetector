@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from utils.model_loader import ensure_model
 
 
 class MainWindow:
@@ -98,6 +99,7 @@ class MainWindow:
 
 
 if __name__ == "__main__":
+    ensure_model()  # télécharge best.pt si absent
     root = tk.Tk()
     app = MainWindow(root)
     root.mainloop()
