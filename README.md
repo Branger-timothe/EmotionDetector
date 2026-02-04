@@ -44,7 +44,8 @@ pip install numpy==1.26.4
 pip install torch torchvision torchaudio
 pip install ultralytics>=8.1.0
 pip install opencv-python
-pip install pygame`
+pip install pygame
+pip install deepface`
 
 To throw the game : 
 `python -m src.game.game`

@@ -1,9 +1,9 @@
 import pygame
 
-import EmotionResult as ER
+import src.EmotionResult as ER
 
 import tkinter as tk
-from EmotionStatistics import EmotionStatistics
+from src.EmotionStatistics import EmotionStatistics
 from tkinter import ttk
 from queue import Queue
 from PIL import Image, ImageTk
@@ -12,7 +12,7 @@ import threading
 import cv2
 import time
 
-from src.IA.handDetector import HandPoseDetector
+#from IA.handDetector import HandPoseDetector
 from src.game.game import Game, create_fruit_ninja_game
 
 
@@ -110,9 +110,13 @@ class MainWindow:
         self.video_label.config(image="")
         self.hide_button_afer_stop()
 
-
     def start_game_placeholder(self):
         print("Signal : Démarrage du jeu")
+
+        if self.is_running:
+            print("Arrêt automatique de la caméra pour le jeu...")
+            self.stop_cam_placeholder()
+
         if self.btn_game:
             self.btn_game.pack_forget()
         self.btn_end_game.pack(pady=10, padx=20, fill='x')

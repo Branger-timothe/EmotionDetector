@@ -53,8 +53,7 @@ class EmotionStatistics:
             plt.figtext(0.15, 0.8, f"Âge moyen détecté : {age_moyen:.1f} ans", fontsize=10,
                         bbox={"facecolor": "orange", "alpha": 0.2})
 
-        plt.savefig('../datas/evolution_emotions.png')
-        plt.show()
+        plt.savefig('datas/evolution_emotions.png')
         self.generer_camembert_emotions()
 
     def generer_camembert_emotions(self):
@@ -71,5 +70,4 @@ class EmotionStatistics:
         plt.figure(figsize=(8, 8))
         plt.pie(values,labels=labels,autopct='%1.1f%%',startangle=140,colors=couleurs,shadow=True)
         plt.title(f"Répartition globale des émotions\n(Basé sur {self.total_stats} analyses)")
-        plt.savefig('../datas/repartition_emotions_camembert.png')
-        plt.show()
+        plt.savefig('datas/repartition_emotions_camembert.png')
