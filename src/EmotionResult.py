@@ -1,7 +1,7 @@
 import cv2
 from deepface import DeepFace
 import os
-from typing import List, Dict
+from typing import List, Dict, Optional
 from dataclasses import dataclass
 
 
@@ -11,15 +11,19 @@ class EmotionResult:
     dominant_emotion: str
     emotions: Dict[str, float]
     age: int
+    dominant_gender: Optional[str]
+    dominant_race: Optional[str]
     region: Dict[str, int]
 
     @classmethod
-    def from_deepface_result(cls, result: Dict) -> 'AnalysisResult':
+    def from_deepface_result(cls, result: Dict) -> 'EmotionResult':
         """Crée un AnalysisResult à partir d'un résultat DeepFace"""
         return cls(
             dominant_emotion=result.get('dominant_emotion', 'unknown'),
             emotions=result.get('emotion', {}),
             age=result.get('age', 0),
+            dominant_gender=result.get('dominant_gender'),
+            dominant_race=result.get('dominant_race'),
             region=result.get('region', {})
         )
 
@@ -155,10 +159,17 @@ class EmotionVisualizer:
         y = region.get('y', 0)
         w = region.get('w', 0)
 
-
-        # Émotion dominante + Âge
+        # Émotion dominante + Âge + genre et race si présent
         text = f"{result.dominant_emotion} | Age: {result.age}"
-        cv2.putText(frame, text, (x, y - 10),
+        if result.dominant_gender:
+            text2 = f"Gender: {result.dominant_gender}"
+            cv2.putText(frame, text2, (0, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+        if result.dominant_race:
+            text3 = f"Race: {result.dominant_race}"
+            cv2.putText(frame, text3, (0, 80),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+        cv2.putText(frame, text, (0, 20),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
         # Top 3 émotions avec scores
