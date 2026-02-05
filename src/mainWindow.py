@@ -144,8 +144,8 @@ class MainWindow:
     def hide_button_afer_stop(self):
         if self.btn_stop:
             self.btn_stop.pack_forget()
-        if self.btn_game:
-            self.btn_game.pack_forget()
+        #if self.btn_game:
+            #self.btn_game.pack_forget()
         if self.btn_end_game:
             self.btn_end_game.pack_forget()
         self.btn_start.pack(pady=10, padx=20, fill='x', after=self.emotion_status)
