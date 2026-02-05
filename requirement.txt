@@ -1,8 +1,13 @@
+Pillow==12.1.0
 numpy==1.26.4
 tensorflow==2.20.0
 tf-keras==2.20.1
 opencv-python==4.11.0.86
 deepface==0.0.93
-matplotlib
-pandas
 ultralytics
+matplotlib
+pygame
+pandas
+
+
+#pour lancer l'installation, pip install -r requirement.txt
