@@ -1,3 +1,6 @@
+torch
+torchvision
+torchaudio
 Pillow==12.1.0
 numpy==1.26.4
 tensorflow==2.20.0
