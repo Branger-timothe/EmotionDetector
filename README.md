@@ -46,11 +46,8 @@ Upgrade pip:
 ```bash
 python -m pip install --upgrade pip
 ```
-Install PyTorch:
-```bash
-pip install torch torchvision torchaudio
-```
-Install remaining packages :
+
+Install packages :
 ```bash
 pip install -r requirements.txt
 ```
