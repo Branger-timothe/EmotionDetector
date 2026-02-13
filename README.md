@@ -49,7 +49,7 @@ python -m pip install --upgrade pip
 
 Install packages :
 ```bash
-pip install -r requirements.txt
+pip install -r requirement.txt
 ```
 <small>(This will automatically install NumPy, TensorFlow, DeepFace, and other dependencies)</small>
 
